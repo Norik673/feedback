@@ -21,11 +21,12 @@ export class TargetOptionController {
     return this.targetOptionService.create(createTargetOptionDto, userId, orgId);
   }
 
-  @Get('find/:id')
+  @Get('find')
   @ApiOperation({summary: 'search target-option'})
   @ApiResponse({status: 201, description: 'target-option which you searched'})
-  findAll(@Param('id') id: number): Promise<TargetOptions[]> {
-    return this.targetOptionService.findAll(+id);
+  findAll(@Request() req): Promise<TargetOptions[]> {
+    const orgId = req.user.orgId;
+    return this.targetOptionService.findAll(orgId);
   }
 
   @Patch('update/:id')

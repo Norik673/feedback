@@ -13,8 +13,8 @@ export class TargetOptionService {
     return await this.targetOptionModel.save({...createTargetOptionDto, userId, orgId});
   }
     
-  async findAll(id: number): Promise<TargetOptions[]> {
-    return await this.targetOptionModel.find({where: {id}});
+  async findAll(orgId: number): Promise<TargetOptions[]> {
+    return await this.targetOptionModel.find({where: {orgId}});
   }
     
   async update(id: number, updateTargetOptionDto: UpdateTargetOptionDto): Promise<TargetOptions> {

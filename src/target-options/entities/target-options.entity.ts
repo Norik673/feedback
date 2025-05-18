@@ -11,6 +11,12 @@ export enum CommentEnum {
 export class TargetOptions {
     @PrimaryGeneratedColumn()
     id: number
+
+    @Column()
+    orgId: number;
+
+    @Column()
+    userId: number;
     
     @Column()
     targetId: number

@@ -10,6 +10,12 @@ export enum TypeEnum {
 export class Feedbacks {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Column()
+    orgId: number;
+
+    @Column()
+    userId: number;
     
     @Column()
     targetId: number;
