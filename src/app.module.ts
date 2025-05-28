@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {ConfigModule} from '@nestjs/config';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import {join} from 'path';
 import { TargetModule } from './targets/targets.module';
 import { FeedbackModule } from './feedbacks/feedbacks.module';
 import { TargetOptionModule } from './target-options/target-options.module';
 import { AuthModule } from './auth/auth.module';
-
+import {CacheModule} from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-ioredis';
 
 @Module({
   imports: [
@@ -21,6 +20,15 @@ import { AuthModule } from './auth/auth.module';
       synchronize: true,
       autoLoadEntities: true,
       database: 'feedback', 
+    }),
+    CacheModule.registerAsync({
+      useFactory: async () => ({
+        store: redisStore as any,
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT || '6379'),
+        ttl: 3600,
+      }),
+      isGlobal: true,
     }),
     
     TargetModule, FeedbackModule, TargetOptionModule, AuthModule]

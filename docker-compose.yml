@@ -3,27 +3,61 @@ version: '3.9'
 services:
   app:
     build: .
+    container_name: feedback-app
     ports:
       - "${PORT}:${PORT}"
     env_file:
       - .env
     depends_on:
       - db
+      - redis
     volumes:
       - .:/app
     working_dir: /app
     command: npm run start:dev
+    networks:
+      - app-network
 
   db:
     image: mysql:8
     restart: always
+    container_name: feedback-db
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d feedback"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - "${DB_PORT_AUT}:${DB_PORT}"
     volumes:
       - mysql-data:/var/lib/mysql
+    networks:
+      - app-network
 
+  redis:
+    image: redis
+    container_name: feedback-redis
+    ports:
+      - '${REDIS_PORT}:${REDIS_PORT}'
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    restart: always
+    volumes:
+      - redis-data:/data
 volumes:
   mysql-data:
+  redis-data:
+
+networks:
+  app-network:
+    driver: bridge
