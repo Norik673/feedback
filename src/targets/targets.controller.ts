@@ -3,7 +3,6 @@ import { TargetService } from './targets.service';
 import { Targets } from './entities/targets.entity';
 import { CreateTargetDto } from './dto/create-targets.dto';
 import { UpdateTargetDto } from './dto/update-targets.dto';
-import { Public } from 'src/common/public.decorators';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
@@ -21,11 +20,12 @@ export class TargetController {
     return this.targetService.create(createTargetDto, orgId);
   }
 
-  @Get('find/:name')
+  @Get('find')
   @ApiOperation({summary: 'search targets'})
   @ApiResponse({status: 201, description: 'targets which you searched'})
-  findAll(@Param('name') name: string): Promise<Targets[]> {
-    return this.targetService.findAll(name);
+  findAll(@Request() req): Promise<Targets[]> {
+    const orgId = req.user.orgId;
+    return this.targetService.findAll(orgId);
   }
 
   @Patch('update/:id')

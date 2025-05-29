@@ -7,6 +7,9 @@ export class Targets {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column()
+    orgId: number;
+
     @Column({nullable: true})
     rating?: number;
 

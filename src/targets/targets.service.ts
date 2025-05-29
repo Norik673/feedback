@@ -13,8 +13,8 @@ export class TargetService {
     return await this.targetModel.save({...createTargetDto, orgId});
   }
 
-  async findAll(name: string): Promise<Targets[]> {
-    return await this.targetModel.find({where: {name}});
+  async findAll(orgId: number): Promise<Targets[]> {
+    return await this.targetModel.find({where: {orgId}});
   }
 
   async update(id: number, updateTargetDto: UpdateTargetDto): Promise<Targets> {

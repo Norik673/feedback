@@ -13,8 +13,8 @@ export class FeedbackService {
     return await this.feedbackModel.save({...createFeedbackDto, userId, orgId});
   }
         
-  async findAll(targetId: number): Promise<Feedbacks[]> {
-    return await this.feedbackModel.find({where: {targetId}});
+  async findAll(orgId: number): Promise<Feedbacks[]> {
+    return await this.feedbackModel.find({where: {orgId}});
   }
         
   async update(id: number, updateFeedbackDto: UpdateFeedbackDto): Promise<Feedbacks> {
