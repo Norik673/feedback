@@ -19,24 +19,15 @@ export class FeedbackService {
   }
         
   async findAll(orgId: number): Promise<Feedbacks[]> {
-    await this.cacheManager.set('test-key', { hello: 'world' }, 60);
-    const cach = await this.cacheManager.get('test-key');
-    console.log('Cached Value:', cach);
     const cacheKey = `feedbacks:${orgId}`;
     const cached = await this.cacheManager.get<Feedbacks[]>(cacheKey);
-    
-console.log('CACHE KEY:', cacheKey);
-console.log('CACHED VALUE:', cached);
 
     if(cached) {
       console.log('->->->->->->->->->From Cache');
       return cached;
     } else {
       const feedbacks = await this.feedbackModel.find({where: {orgId}});
-      await this.cacheManager.set(cacheKey, feedbacks, 60000);
-      const cached = await this.cacheManager.get<Feedbacks[]>(cacheKey);
-console.log('Caching feedbacks for', orgId);
-console.log('cached value:-----', cached)
+      await this.cacheManager.set(cacheKey, feedbacks, 0);
       return feedbacks;
     }
   }
