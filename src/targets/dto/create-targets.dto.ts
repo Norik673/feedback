@@ -5,7 +5,7 @@ export class CreateTargetDto {
     @ApiProperty({example: 5, description: 'rating target'})
     @IsNumber()
     @IsOptional()
-    @Max(999)
+    @Max(100)
     rating?: number;
 
     @ApiProperty({example: 'room', description: 'target name'})

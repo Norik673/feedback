@@ -11,7 +11,7 @@ export class CreateFeedbackDto {
     @ApiProperty({example: 5, description: 'grade feedback'})
     @IsNumber()
     @IsOptional()
-    @Max(999)
+    @Max(100)
     grade?: number;
 
     @ApiProperty({example: 'good', description: 'comment'})
